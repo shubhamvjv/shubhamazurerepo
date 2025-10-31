@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: newappazure
+  description: sdhhh
+  annotations:
+    github.com/project-slug: shubhamvjv/shubhamazurerepo
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - nextjs
+    - react
+    - typescript
+    - azure
+  links:
+    - url: https://shubhamazureweb.azurewebsites.net
+      title: Production Website
+      icon: web
+spec:
+  type: website
+  lifecycle: production
+  owner: group:default/guests
+  system: web-applications
