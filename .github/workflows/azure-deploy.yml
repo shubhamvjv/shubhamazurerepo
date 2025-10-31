@@ -9,15 +9,10 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  AZURE_WEBAPP_NAME: shubhamazureweb
-  AZURE_RESOURCE_GROUP: coe-platform-engineering-rg
-  NODE_VERSION: '20.x'
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -25,7 +20,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 
+        node-version: '20.x'
         cache: 'npm'
 
     - name: Install dependencies
@@ -52,8 +47,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main'
-    environment:
-      name: 'production'
 
     steps:
     - name: Download artifact
@@ -61,23 +54,9 @@ jobs:
       with:
         name: nextjs-app
 
-    - name: Install required tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y curl jq
-
-    - name: Azure Login
-      uses: azure/login@v2
-      with:
-        creds: 
-
     - name: Deploy to Azure Web App
-      run: |
-        az webapp deployment source config-zip \
-          --resource-group  \
-          --name  \
-          --src deployment.zip
-      continue-on-error: true
-
-    - name: Logout from Azure
-      run: az logout
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: shubhamappbackstage
+        package: deployment.zip
+        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
